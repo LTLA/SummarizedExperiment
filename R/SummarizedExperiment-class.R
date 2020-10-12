@@ -817,6 +817,19 @@ setMethod("cbind", "SummarizedExperiment",
     }
 }
 
+### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+### Split variants
+###
+
+splitByRow <- function(x, f, drop=FALSE) {
+    split(x, f, drop=drop)
+}
+
+splitByCol <- function(x, f, drop=FALSE) {
+    by.col <- split(seq_len(ncol(x)), f, drop=drop)
+    out <- lapply(by.col, function(i) x[,i])
+    List(out)
+}
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### identicalVals()

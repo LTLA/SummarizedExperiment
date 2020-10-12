@@ -54,6 +54,10 @@
 \alias{[<-,SummarizedExperiment,ANY,ANY,SummarizedExperiment-method}
 \alias{subset,SummarizedExperiment-method}
 
+% Splitting
+\alias{splitByRow}
+\alias{splitByCol}
+
 % Quick colData access
 \alias{[[,SummarizedExperiment,ANY,missing-method}
 \alias{[[<-,SummarizedExperiment,ANY,missing-method}
@@ -122,6 +126,11 @@ colData(x, ...) <- value
 \S4method{[}{SummarizedExperiment}(x, i, j, ..., drop=TRUE)
 \S4method{[}{SummarizedExperiment,ANY,ANY,SummarizedExperiment}(x, i, j) <- value
 \S4method{subset}{SummarizedExperiment}(x, subset, select, ...)
+
+## Splitting
+
+splitByRow(x, f, drop=FALSE)
+splitByCol(x, f, drop=FALSE)
 
 ## Combining
 
@@ -196,7 +205,13 @@ colData(x, ...) <- value
     of a SummarizedExperiment object can contain NAs, but the rownames of
     a \link[S4Vectors]{DataFrame} object cannot).}
 
-  \item{drop}{A \code{logical(1)}, ignored by these methods.}
+  \item{drop}{A \code{logical(1)}, ignored by most of these methods;
+    except for \code{splitByRow} and \code{splitByCol}, where they determine
+    whether an unused level of \code{f} is preseved in the output.} 
+
+  \item{f}{A factor of length equal to the number of rows (for \code{splitByRow})
+    or columns (for \code{splitByCol}), specifying how rows/columns of \code{x}
+    should be split into separate objects.}
 
   \item{deparse.level}{See \code{?base::\link[base]{cbind}} for a description of
     this argument.}
@@ -352,6 +367,26 @@ colData(x, ...) <- value
 
     \item{\code{x[[i, ...]]}, \code{x[[i, ...]] <- value}}{Access or
     replace column \code{i} in \code{x}.}
+
+  }
+
+}
+
+\section{Splitting by dimension}{
+
+  In the code snippets below, \code{x} is a SummarizedExperiment object.
+
+  \describe{ 
+    \item{\code{splitByRow(x, f, drop=FALSE)}:}{Splits \code{x} into a \linkS4class{List}
+      with one entry per level of \code{f}, containing a SummarizedExperiment
+      object with the subset of rows corresponding to that level. This 
+      assumes that \code{f} is parallel to the rows of \code{x}. Note, the 
+      same effect can be obtained with \code{split(x, f, drop=FALSE)}.}
+
+    \item{\code{splitByCol(x, f, drop=FALSE)}:}{Splits \code{x} into a \linkS4class{List}
+      with one entry per level of \code{f}, containing a SummarizedExperiment
+      object with the subset of columns corresponding to that level. This 
+      assumes that \code{f} is parallel to the columns of \code{x}.}
 
   }
 

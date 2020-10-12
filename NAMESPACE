@@ -88,7 +88,8 @@ export(
     makeSummarizedExperimentFromDataFrame,
     makeSummarizedExperimentFromLoom,
     naiveRangeMapper, probeRangeMapper, geneRangeMapper,
-    readKallisto, readKallistoBootstrap, KALLISTO_ASSAYS
+    readKallisto, readKallistoBootstrap, KALLISTO_ASSAYS,
+    splitByCol, splitByRow
 )
 
 

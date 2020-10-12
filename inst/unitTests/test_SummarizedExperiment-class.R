@@ -284,6 +284,32 @@ test_SummarizedExperiment_subset <- function()
     checkIdentical(dim(se[ ,1:5]), c(0L, 5L)) 
 }
 
+test_SummarizedExperiment_split <- function() 
+{
+    se0 <- se0List[[1]] 
+    bycol <- splitByCol(se0, colData(se0)[,1])
+    checkIdentical(unname(vapply(bycol, ncol, 0L)), rep(1L, ncol(se0)))
+    checkIdentical(names(bycol), letters[1:3])
+
+    byrow <- splitByRow(se0, rowData(se0)[,1])
+    checkIdentical(unname(vapply(byrow, nrow, 0L)), rep(1L, nrow(se0)))
+    checkIdentical(names(byrow), LETTERS[1:5])
+
+    # drop= works correctly.
+    colData(se0)[,1] <- factor(colData(se0)[,1], levels=c(letters[1:4]))
+    rowData(se0)[,1] <- factor(rowData(se0)[,1], levels=c(LETTERS[1:6]))
+
+    bycol2 <- splitByCol(se0, colData(se0)[,1])
+    checkIdentical(se0[,0], bycol2$d)
+    byrow2 <- splitByRow(se0, rowData(se0)[,1])
+    checkIdentical(se0[0,], byrow2$F)
+
+    bycol3 <- splitByCol(se0, colData(se0)[,1], drop=TRUE)
+    checkIdentical(names(bycol), names(bycol3))
+    byrow3 <- splitByRow(se0, rowData(se0)[,1], drop=TRUE)
+    checkIdentical(names(byrow), names(byrow3))
+}
+
 test_SummarizedExperiment_subsetassign <- function()
 {
     for (i in seq_along(se0List)) {
